@@ -1,25 +1,182 @@
-/**
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
-@import url('./reset.css');
-@import url('./vite-promo.css');
-@import url('./header.css');
+body {
+  background-color: rgb(153, 182, 245);
+  font-family: Montserrat;
+}
 
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+.search {
+  border-bottom: 1px solid #5c6297;
+  box-shadow: 0px 1px 6px 0px rgba(46, 47, 66, 0.08), 0px 1px 1px 0px rgba(46, 47, 66, 0.16), 0px 2px 1px 0px rgba(46, 47, 66, 0.08);
+
+  text-align: center;
+  padding: 35px 0;
+}
+
+.input-search {
+  width: 320px;
+  border-radius: 7px;
+  border: 1px solid #808080;
+  outline: transparent;
+  padding: 10px 16px;
+}
+
+.input-search:focus {
+  border-color: #2a3a75;
+}
+
+.btn-search {
+  
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  background-color: #2d313f;
+  border: transparent;
+
+  color: #FFF;
   font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
 
-  color: #242424;
-  background-color: rgba(255, 255, 255, 0.87);
+  transition: background-color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 8px 25px;
+  margin-left: -10px;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+.btn-search:hover {
+  background-color: #5c6172;
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: currentColor;
+  display: block;
+  margin: 40vh auto 0;
+  position: relative;
+  color: #FFF;
+  transform: translateY(30px);
+  box-sizing: border-box;
+  
+}
+
+.loader::after,
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: currentColor;
+  color: #FFF;
+  position: absolute;
+  left: 30px;
+  top: 0;
+  animation: animloader 2s 0.2s ease infinite;
+}
+
+.loader::before {
+  animation-delay: 0.4s;
+  left: 60px;
+}
+
+@keyframes animloader {
+  0% {
+      top: 0;
+      color: white;
+  }
+
+  50% {
+      top: 30px;
+      color: rgba(255, 255, 255, 0.2);
+  }
+
+  100% {
+      top: 0;
+      color: white;
+  }
+}
+
+.container {
+  padding: 0 15px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  justify-content: center;
+  padding: 20px 0;
+
+}
+
+.gallery-item {
+  margin-left: 20px;
+  transition: transform .3s;
+}
+
+.gallery-item:hover,
+.gallery-item:focus {
+  box-shadow: 0px 1px 6px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16), 0px 2px 1px rgba(46, 47, 66, 0.08);
+  transform: scale(1.05);
+}
+
+.gallery-link {
+  min-width: 320px;
+  flex-basis: calc((100% - 80px) / 4);
+  min-width: 320px;
+}
+
+.gallery-link:hover {
+  cursor: zoom-in;
+}
+
+.gallery-image {
+  display: block;
+  height: 30vh;
+  object-fit: cover;
+
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+.thumb-block {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #626aa5;
+  border-top: none;
+
+  padding: 10px 0;
+}
+
+.gallery-item:hover .thumb-block {
+  border-color: #8791e0;
+  box-shadow: 0px 1px 6px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16), 0px 2px 1px rgba(46, 47, 66, 0.08);
+}
+
+.block {
+  text-align: center;
+}
+
+.title {
+  color: #212127;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+.amount {
+  color: #212127;
+  font-family: Montserrat;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
 }
