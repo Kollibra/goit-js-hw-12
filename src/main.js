@@ -1,5 +1,3 @@
-
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from 'izitoast';
@@ -16,22 +14,24 @@ let searchParamsDefaults = {
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
-  page: 1, // Додали початкове значення параметра page
-  per_page: 40, // Змінили значення параметра per_page на 40
+  page: 1,
+  per_page: 40,
 };
 
-let currentSearchQuery = ''; // Глобальна змінна для збереження останнього пошукового запиту
+let currentSearchQuery = '';
+
+let lightbox;
 
 function showLoaderAndHideGallery() {
   loaderElement.style.display = 'block';
   galleryContainer.style.display = 'none';
-  loadMoreButton.style.display = 'none'; // Ховаємо кнопку при завантаженні
+  loadMoreButton.style.display = 'none';
 }
 
-function hideLoaderAndShowGallery() {
+function hideLoaderAndShowGallery(hasMoreImages) {
   loaderElement.style.display = 'none';
   galleryContainer.style.display = 'flex';
-  loadMoreButton.style.display = 'block'; // Показуємо кнопку після завантаження
+  loadMoreButton.style.display = hasMoreImages ? 'block' : 'none';
 }
 
 function generateGalleryHTML(hits) {
@@ -66,14 +66,16 @@ function appendToGallery(hits) {
 }
 
 function initializeImageLightbox() {
-  let lightbox = new SimpleLightbox('.gallery a', {
-    nav: true,
-    captionDelay: 250,
-    captionsData: 'alt',
-    close: true,
-    enableKeyboard: true,
-    docClose: true,
-  });
+  if (!lightbox) {
+    lightbox = new SimpleLightbox('.gallery a', {
+      nav: true,
+      captionDelay: 250,
+      captionsData: 'alt',
+      close: true,
+      enableKeyboard: true,
+      docClose: true,
+    });
+  }
   lightbox.refresh();
 }
 
@@ -93,7 +95,7 @@ async function searchImages(params, append = false) {
 
   try {
     const response = await axios.get(`https://pixabay.com/api/?${params}`);
-    hideLoaderAndShowGallery();
+    hideLoaderAndShowGallery(response.data.hits.length >= searchParamsDefaults.per_page);
 
     if (response.status !== 200) {
       throw new Error(response.statusText);
@@ -112,6 +114,9 @@ async function searchImages(params, append = false) {
     } else {
       handleNoResults();
     }
+
+    // Перевірка чи достатньо зображень для показу кнопки "Load more"
+    loadMoreButton.style.display = hits.length >= searchParamsDefaults.per_page ? 'block' : 'none';
   } catch (error) {
     console.error(error);
   }
@@ -120,17 +125,15 @@ async function searchImages(params, append = false) {
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   searchParamsDefaults.q = event.target.elements.search.value.trim();
-  currentSearchQuery = searchParamsDefaults.q; // Зберігаємо останній пошуковий запит
-  searchParamsDefaults.page = 1; // Скидаємо значення page при новому пошуку
+  currentSearchQuery = searchParamsDefaults.q;
+  searchParamsDefaults.page = 1;
   await searchImages(new URLSearchParams(searchParamsDefaults));
   event.currentTarget.reset();
 });
 
-// Додаємо обробник події для кнопки "Load more"
-loadMoreButton.addEventListener('click', () => {
-  searchParamsDefaults.page++; // Збільшуємо значення page перед новим запитом
-  searchImages(new URLSearchParams(searchParamsDefaults), true);
+loadMoreButton.addEventListener('click', async () => {
+  searchParamsDefaults.page++;
+  await searchImages(new URLSearchParams(searchParamsDefaults), true);
 });
 
-// Приховуємо кнопку "Load more", поки галерея пуста
 loadMoreButton.style.display = 'none';
