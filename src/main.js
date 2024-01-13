@@ -19,7 +19,6 @@ let searchParamsDefaults = {
 };
 
 let currentSearchQuery = '';
-
 let lightbox;
 
 function showLoaderAndHideGallery() {
@@ -61,7 +60,7 @@ function renderGallery(hits) {
 
 function appendToGallery(hits) {
   const galleryHTML = generateGalleryHTML(hits);
-  galleryContainer.innerHTML += galleryHTML;
+  galleryContainer.insertAdjacentHTML('beforeend', galleryHTML);
   initializeImageLightbox();
 }
 
@@ -91,6 +90,9 @@ function handleNoResults() {
 async function searchImages(params, append = false) {
   if (!append) {
     showLoaderAndHideGallery();
+    // Очистимо галерею та скинемо значення сторінки при новому пошуку
+    galleryContainer.innerHTML = '';
+    searchParamsDefaults.page = 1;
   }
 
   try {
@@ -98,7 +100,7 @@ async function searchImages(params, append = false) {
     hideLoaderAndShowGallery(response.data.hits.length >= searchParamsDefaults.per_page);
 
     if (response.status !== 200) {
-      throw new Error(response.statusText);
+      throw new Error(`Failed to fetch images. Status: ${response.status}`);
     }
 
     const { hits } = response.data;
@@ -118,18 +120,32 @@ async function searchImages(params, append = false) {
     // Перевірка чи достатньо зображень для показу кнопки "Load more"
     loadMoreButton.style.display = hits.length >= searchParamsDefaults.per_page ? 'block' : 'none';
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
+    iziToast.error({
+      position: 'topRight',
+      color: 'red',
+      message: 'Failed to fetch images. Please try again!',
+    });
   }
 }
+
 
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   searchParamsDefaults.q = event.target.elements.search.value.trim();
   currentSearchQuery = searchParamsDefaults.q;
-  searchParamsDefaults.page = 1;
   await searchImages(new URLSearchParams(searchParamsDefaults));
-  event.currentTarget.reset();
+
+  // Перевірка на нуль перед викликом reset
+  if (event.currentTarget) {
+    event.currentTarget.reset();
+  }
 });
+
+
+
+
+
 
 loadMoreButton.addEventListener('click', async () => {
   searchParamsDefaults.page++;
