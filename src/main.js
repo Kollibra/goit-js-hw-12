@@ -129,11 +129,14 @@ async function searchImages(params, append = false) {
   }
 }
 
-
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   searchParamsDefaults.q = event.target.elements.search.value.trim();
   currentSearchQuery = searchParamsDefaults.q;
+
+  // Скидаємо значення сторінки до 1 при новому пошуку
+  searchParamsDefaults.page = 1;
+
   await searchImages(new URLSearchParams(searchParamsDefaults));
 
   // Перевірка на нуль перед викликом reset
@@ -141,11 +144,6 @@ searchForm.addEventListener('submit', async (event) => {
     event.currentTarget.reset();
   }
 });
-
-
-
-
-
 
 loadMoreButton.addEventListener('click', async () => {
   searchParamsDefaults.page++;
