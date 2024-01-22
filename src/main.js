@@ -90,7 +90,7 @@ function handleNoResults() {
 async function searchImages(params, append = false) {
   if (!append) {
     showLoaderAndHideGallery();
-    // Очистимо галерею та скинемо значення сторінки при новому пошуку
+    // Очистимо галерею та скинемо значення сторінки при новому пошуку   
     galleryContainer.innerHTML = '';
     searchParamsDefaults.page = 1;
   }
