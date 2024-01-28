@@ -90,7 +90,7 @@ function handleNoResults() {
 async function searchImages(params, append = false) {
   if (!append) {
     showLoaderAndHideGallery();
-    // Очистимо галерею та скинемо значення сторінки при новому пошуку   
+    
     galleryContainer.innerHTML = '';
     searchParamsDefaults.page = 1;
   }
@@ -134,7 +134,7 @@ searchForm.addEventListener('submit', async (event) => {
   searchParamsDefaults.q = event.target.elements.search.value.trim();
   currentSearchQuery = searchParamsDefaults.q;
 
-  // Скидаємо значення сторінки до 1 при новому пошуку
+  
   searchParamsDefaults.page = 1;
 
   await searchImages(new URLSearchParams(searchParamsDefaults));
