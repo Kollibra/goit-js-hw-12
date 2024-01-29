@@ -30,7 +30,7 @@ ul{
 
 .nav-link:hover,
 .nav-link:focus {
-  color: #747bff;
+  color: #232886;
 }
 
 .form {
@@ -54,7 +54,7 @@ ul{
 
 .gallery-item {
   width: calc((100% - 72px) / 4);
-  box-shadow: 5px 5px 10px #696969;
+  box-shadow: 5px 5px 10px #a29e9e;
   border-radius: 5px;
 }
 
@@ -74,7 +74,7 @@ ul{
 
 p {
   text-align: center;
-  color: #2e2f42;
+  color: #41425b;
   font-family: Montserrat;
   font-size: 14px;
   font-weight: 700;
