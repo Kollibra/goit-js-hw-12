@@ -152,4 +152,3 @@ loadMoreButton.addEventListener('click', async () => {
 
 loadMoreButton.style.display = 'none';
 
-// ,47475757
